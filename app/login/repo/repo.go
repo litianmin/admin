@@ -1,7 +1,6 @@
 package repo
 
 import (
-	"admin/app/login/entity"
 	"database/sql"
 )
 
@@ -16,6 +15,13 @@ func NewRepo(conn *sql.DB) *Repo {
 }
 
 // LoginAuth 在数据库进行登陆验证
-func (r *Repo) LoginAuth(body *entity.LoginAuth) {
-
+func (r *Repo) LoginAuth(userName, pwd string) uint64 {
+	stmt, _ := r.Conn.Prepare("SELECT id FROM admin_user WHERE identifier = ? AND credential = ?")
+	defer stmt.Close()
+	var userID uint64
+	err := stmt.QueryRow(userName, pwd).Scan(&userID)
+	if err != nil {
+		return 0
+	}
+	return userID
 }

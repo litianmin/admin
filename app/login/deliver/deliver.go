@@ -12,10 +12,24 @@ import (
 var repoServer = repo.NewRepo(mysql.DBConn)
 var ucaseServer = ucase.NewUcase(repoServer)
 
+type mytest struct {
+	code uint
+	msg  string
+}
+
 // Login serve for login!
 func Login(c *gin.Context) {
 	body := entity.LoginAuth{}
 	c.BindJSON(&body)
-	ucaseServer.LoginAuth(&body)
-	c.JSON(200, "{'code':'40000', 'msg':'测试失败'}")
+	isPass, token := ucaseServer.LoginAuth(&body)
+
+	if isPass == false {
+		c.JSON(200, gin.H{
+			"ceshi": "账号密码错误",
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"ceshi": token,
+		})
+	}
 }
