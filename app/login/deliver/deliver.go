@@ -17,5 +17,5 @@ func Login(c *gin.Context) {
 	body := entity.LoginAuth{}
 	c.BindJSON(&body)
 	ucaseServer.LoginAuth(&body)
-	c.JSON(200, "ceshi")
+	c.JSON(200, "{'code':'40000', 'msg':'测试失败'}")
 }
