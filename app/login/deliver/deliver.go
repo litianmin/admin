@@ -4,6 +4,7 @@ import (
 	"admin/app/login/entity"
 	"admin/app/login/repo"
 	"admin/app/login/ucase"
+	"admin/common/resp"
 	"admin/init/mysql"
 
 	"github.com/gin-gonic/gin"
@@ -24,12 +25,13 @@ func Login(c *gin.Context) {
 	isPass, token := ucaseServer.LoginAuth(&body)
 
 	if isPass == false {
-		c.JSON(200, gin.H{
-			"ceshi": "账号密码错误",
-		})
-	} else {
-		c.JSON(200, gin.H{
-			"ceshi": token,
-		})
+		c.JSON(200, resp.AccountPwdErr)
+		c.Abort()
 	}
+
+	c.JSON(200, gin.H{
+		"code":  20000,
+		"token": token,
+	})
+
 }
