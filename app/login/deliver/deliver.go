@@ -13,12 +13,8 @@ import (
 var repoServer = repo.NewRepo(mysql.DBConn)
 var ucaseServer = ucase.NewUcase(repoServer)
 
-type mytest struct {
-	code uint
-	msg  string
-}
-
 // Login serve for login!
+// 验证成功， 返回token，反则返回空
 func Login(c *gin.Context) {
 	body := entity.LoginAuth{}
 	c.BindJSON(&body)
@@ -29,9 +25,12 @@ func Login(c *gin.Context) {
 		c.Abort()
 	}
 
-	c.JSON(200, gin.H{
-		"code":  20000,
+	dataBack := map[string]string{
 		"token": token,
+	}
+	c.JSON(200, gin.H{
+		"code": 20000,
+		"msg":  dataBack,
 	})
 
 }
