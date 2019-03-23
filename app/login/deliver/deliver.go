@@ -4,6 +4,7 @@ import (
 	"admin/app/login/entity"
 	"admin/app/login/repo"
 	"admin/app/login/ucase"
+	"admin/app/login/validate"
 	"admin/common/resp"
 	"admin/init/mysql"
 
@@ -18,11 +19,21 @@ var ucaseServer = ucase.NewUcase(repoServer)
 func Login(c *gin.Context) {
 	body := entity.LoginAuth{}
 	c.BindJSON(&body)
+
+	validate := validate.Login(&body)
+	if validate == false {
+		c.JSON(200, gin.H{
+			"code": 40000,
+			"msg":  "参数错误！",
+		})
+		return
+	}
+
 	isPass, token := ucaseServer.LoginAuth(&body)
 
 	if isPass == false {
 		c.JSON(200, resp.AccountPwdErr)
-		c.Abort()
+		return
 	}
 
 	dataBack := map[string]string{
