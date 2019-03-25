@@ -2,8 +2,8 @@ package resp
 
 // GeneralResp 定义一般回复实体
 type GeneralResp struct {
-	Code uint64
-	Msg  interface{}
+	Code uint64      `json:"code"`
+	Msg  interface{} `json:"msg"`
 }
 
 var (
