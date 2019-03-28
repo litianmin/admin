@@ -12,4 +12,10 @@ var (
 		Code: 40000,
 		Msg:  "账号密码错误",
 	}
+
+	// ParamsErr 参数错误
+	ParamsErr = GeneralResp{
+		Code: 40001,
+		Msg:  "参数错误",
+	}
 )

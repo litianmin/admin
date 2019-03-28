@@ -22,10 +22,7 @@ func Login(c *gin.Context) {
 
 	validate := validate.Login(&body)
 	if validate == false {
-		c.JSON(200, gin.H{
-			"code": 40001,
-			"msg":  "参数错误！",
-		})
+		c.JSON(200, resp.ParamsErr)
 		return
 	}
 
