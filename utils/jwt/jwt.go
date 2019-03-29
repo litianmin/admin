@@ -87,6 +87,9 @@ func CreateJwtToken(userID uint64, userTp string) (string, bool) {
 // code	  0 => 没有问题，1 => 非法, 2 => 过期了
 func ParseJwtToken(token *string) (code int, usrID uint64) {
 	strArr := strings.Split(*token, ".")
+	if len(strArr) != 3 {
+		return 1, 0
+	}
 
 	mergeStr := strArr[0] + "." + strArr[1]
 
