@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	loginServer "admin/app/login/deliver"
+	"admin/common/upload"
 	"admin/middleware"
 )
 
@@ -34,6 +35,8 @@ func mytest(c *gin.Context) {
 	// Upload the file to specific dst.
 	// c.SaveUploadedFile(file, dst)
 
+	c.JSON(200, "不错，你已经上传成功了")
+
 	c.String(http.StatusOK, fmt.Sprintf("'%s' uploaded!", file.Filename))
 }
 
@@ -42,7 +45,7 @@ func main() {
 
 	r.POST("/login", loginServer.Login)
 
-	r.POST("/upload", middleware.TokenIsValid, mytest)
+	r.POST("/upload", middleware.TokenIsValid, upload.GameLogoUpload)
 
 	r.Run(":9999")
 }

@@ -10,14 +10,7 @@ import (
 
 // TokenIsValid 判断 token 是否有效
 func TokenIsValid(c *gin.Context) {
-
-	fmt.Println("其实进到这里来了，但是没有作出任何的动作")
-
 	token := c.Request.Header.Get("self-token")
-
-	fmt.Println(token)
-
-	fmt.Println("没有token")
 
 	if len(token) == 0 {
 		c.AbortWithStatusJSON(200, "something wrong")
@@ -36,4 +29,5 @@ func TokenIsValid(c *gin.Context) {
 		c.AbortWithStatusJSON(200, resp.TokenExpired)
 		return
 	}
+	fmt.Println("yinggai bu")
 }

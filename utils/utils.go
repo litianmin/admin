@@ -4,6 +4,10 @@ import (
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/hex"
+	"fmt"
+	"math/rand"
+	"os"
+	"time"
 )
 
 const (
@@ -17,4 +21,36 @@ func PwdSha1Encrypt(pwd string) string {
 	resBytes := h.Sum(nil)
 	resStr := hex.EncodeToString(resBytes)
 	return resStr
+}
+
+// CreateFileAndPath 创建文件，包括文件夹, 模式都是可读的
+func CreateFileAndPath(filePath, fileName string) (*os.File, bool) {
+
+	// 首先判断是否存在文件路径
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		// 文件路径不存在，先创建文件夹
+		if err := os.MkdirAll(filePath, os.ModePerm); err != nil {
+			return nil, false
+		}
+	}
+
+	// 现在来创建文件了
+	file, err := os.Create(filePath + fileName)
+	if err != nil {
+		return nil, false
+	}
+
+	return file, true
+}
+
+// CreateImgFileName 创建一个文件名称
+func CreateImgFileName() string {
+	rand.Seed(time.Now().Unix())
+	newInt := rand.Intn(1000)
+
+	thisMoment := time.Now().UnixNano()
+
+	fileName := fmt.Sprintf("%d%d", thisMoment, newInt)
+
+	return fileName
 }
