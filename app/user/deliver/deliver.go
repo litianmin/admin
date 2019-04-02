@@ -1,10 +1,10 @@
 package deliver
 
 import (
-	"admin/app/login/entity"
-	"admin/app/login/repo"
-	"admin/app/login/ucase"
-	"admin/app/login/validate"
+	"admin/app/user/entity"
+	"admin/app/user/repo"
+	"admin/app/user/ucase"
+	"admin/app/user/validate"
 	"admin/common/resp"
 	"admin/init/mysql"
 

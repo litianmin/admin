@@ -67,10 +67,12 @@ func gameLogoDeal(c *gin.Context) {
 
 	imaging.Save(newSrcImage, gameLogoSrc+newFileName+"_mini.png")
 
+	newGameLogoSrc := gameLogoSrc[1:len(gameLogoSrc)]
+
 	c.JSON(200, gin.H{
 		"code":       20000,
-		"origin_img": gameLogoSrc + newFileName + ".png",
-		"mini_img":   gameLogoSrc + newFileName + "_mini.png",
+		"origin_img": newGameLogoSrc + newFileName + ".png",
+		"mini_img":   newGameLogoSrc + newFileName + "_mini.png",
 	})
 
 }
@@ -105,8 +107,10 @@ func gameDisplayDeal(c *gin.Context) {
 
 	imaging.Save(newSrcImage, gameDisplayImgSrc+newFileName+"_mini.png")
 
+	newGameDisplayImgSrc := gameDisplayImgSrc[1:len(gameDisplayImgSrc)]
+
 	c.JSON(200, gin.H{
 		"code":     20000,
-		"mini_img": gameDisplayImgSrc + newFileName + "_mini.png",
+		"mini_img": newGameDisplayImgSrc + newFileName + "_mini.png",
 	})
 }

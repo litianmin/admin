@@ -1,7 +1,7 @@
 package validate
 
 import (
-	"admin/app/login/entity"
+	"admin/app/game/entity"
 
 	"github.com/asaskevich/govalidator"
 )
@@ -10,8 +10,8 @@ func init() {
 	govalidator.SetFieldsRequiredByDefault(true)
 }
 
-// Login 验证登陆结构体
-func Login(l *entity.LoginAuth) bool {
+// CreateGame 增加游戏的数据验证
+func CreateGame(l *entity.NewGame) bool {
 	_, err := govalidator.ValidateStruct(l)
 	if err != nil {
 		return false

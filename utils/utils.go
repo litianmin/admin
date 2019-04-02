@@ -50,3 +50,9 @@ func CreateImgFileName() string {
 
 	return fileName
 }
+
+// NowFormatToDate 返回现在时间
+func NowFormatToDate() string {
+	now := time.Now().Format("2006-01-02 03:04:05")
+	return now
+}

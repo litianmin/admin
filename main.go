@@ -1,60 +1,22 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
-	"os"
-
 	"github.com/gin-gonic/gin"
 
-	loginServer "admin/app/login/deliver"
+	gameServer "admin/app/game/deliver"
+	userServer "admin/app/user/deliver"
 	"admin/common/upload"
 	"admin/middleware"
 )
 
-// type TestData struct {
-// 	imgTp string
-// }
-
-func mytest(c *gin.Context) {
-	// var testData TestData
-	// c.Bind(&testData)
-	// fmt.Println(testData.imgTp)
-	// return
-
-	// single file
-	file, _ := c.FormFile("file")
-	log.Println(file.Filename)
-
-	fileC, err := file.Open()
-	if err != nil {
-		fmt.Println("something happened here!")
-	}
-
-	str := make([]byte, 2<<20)
-
-	fileC.Read(str)
-	newFile, _ := os.Create("./mytest.png")
-
-	defer newFile.Close()
-
-	newFile.Write(str)
-
-	// Upload the file to specific dst.
-	// c.SaveUploadedFile(file, dst)
-
-	c.JSON(200, "不错，你已经上传成功了")
-
-	c.String(http.StatusOK, fmt.Sprintf("'%s' uploaded!", file.Filename))
-}
-
 func main() {
 	r := gin.Default()
 
-	r.POST("/login", loginServer.Login)
+	r.POST("/login", userServer.Login)
 
 	r.POST("/upload", middleware.TokenIsValid, upload.ImgUpload)
+
+	r.POST("/gamecreate", middleware.TokenIsValid, gameServer.CreateGame)
 
 	r.Run(":9999")
 }

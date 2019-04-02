@@ -1,7 +1,7 @@
 package ucase
 
 import (
-	"admin/app/login/entity"
+	"admin/app/user/entity"
 	"admin/utils"
 	"admin/utils/jwt"
 )
