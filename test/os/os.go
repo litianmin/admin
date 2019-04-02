@@ -8,8 +8,13 @@ import (
 func main() {
 	// 创建一个文件夹
 	// 首先判断该文件路径是否存在
+
+	os.Create("./shenmegui.txt")
+
 	filePath := "./admin/image/"
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+	_, err := os.Stat(filePath)
+
+	if os.IsNotExist(err) {
 		fmt.Println("该文件夹不存在")
 		// 创建文件夹
 		err = os.MkdirAll(filePath, os.ModePerm) // 创建所有文件夹
@@ -18,6 +23,9 @@ func main() {
 		} else {
 			fmt.Println("创建成功")
 		}
+	} else {
+		os.MkdirAll(filePath, os.ModePerm)
+		fmt.Println("妈的到底是什么贵啊")
 	}
 
 	// 创建成功文件夹之后，现在来创建文件

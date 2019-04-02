@@ -27,13 +27,7 @@ func PwdSha1Encrypt(pwd string) string {
 func CreateFileAndPath(filePath, fileName string) (*os.File, bool) {
 
 	// 首先判断是否存在文件路径
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-
-		// 文件路径不存在，先创建文件夹
-		if err := os.MkdirAll(filePath, os.ModePerm); err != nil {
-			return nil, false
-		}
-	}
+	os.MkdirAll(filePath, os.ModePerm)
 
 	// 现在来创建文件了
 	file, err := os.Create(filePath + fileName)
