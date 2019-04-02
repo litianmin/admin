@@ -13,7 +13,16 @@ import (
 	"admin/middleware"
 )
 
+// type TestData struct {
+// 	imgTp string
+// }
+
 func mytest(c *gin.Context) {
+	// var testData TestData
+	// c.Bind(&testData)
+	// fmt.Println(testData.imgTp)
+	// return
+
 	// single file
 	file, _ := c.FormFile("file")
 	log.Println(file.Filename)
@@ -45,7 +54,7 @@ func main() {
 
 	r.POST("/login", loginServer.Login)
 
-	r.POST("/upload", middleware.TokenIsValid, upload.GameLogoUpload)
+	r.POST("/upload", middleware.TokenIsValid, upload.ImgUpload)
 
 	r.Run(":9999")
 }
