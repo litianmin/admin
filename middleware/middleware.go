@@ -13,7 +13,7 @@ func TokenIsValid(c *gin.Context) {
 	token := c.Request.Header.Get("self-token")
 
 	if len(token) == 0 {
-		c.AbortWithStatusJSON(200, "something wrong")
+		c.AbortWithStatusJSON(200, resp.TokenWithout)
 		return
 	}
 
