@@ -56,3 +56,19 @@ func NowFormatToDate() string {
 	now := time.Now().Format("2006-01-02 03:04:05")
 	return now
 }
+
+// NowFormatUnix 返回现在的时间戳
+func NowFormatUnix() int64 {
+	return time.Now().Unix()
+}
+
+// NowAfterFormatToDate 返回距离现在的时间为duration的时间格式： 例如:2006-01-02 03:04:05
+func NowAfterFormatToDate(duration int64) string {
+	now := time.Now().Unix() + duration
+	return time.Unix(now, 0).Format("2006-01-02 15:04:05")
+}
+
+// NowFormatToYMD 返回现在时间的年月日(例如：20190101)
+func NowFormatToYMD() string {
+	return time.Now().Format("20060102")
+}

@@ -27,7 +27,7 @@ func (r *Repo) CreateGame(g *entity.NewGame) bool {
 		gameTp = "1"
 	}
 
-	now := utils.NowFormatToDate()
+	now := utils.NowFormatUnix()
 
 	// 首先往game_base_info表插入游戏基本信息
 	res, err := r.Conn.Exec("INSERT INTO game_base_info(g_name, g_type, g_logo, g_logo_mini, brief_desc, create_time, update_time) VALUES(?, ?, ?, ?, ?, ?, ?)", g.Name, gameTp, g.LogoOrigin, g.LogoMini, g.BriefDesc, now, now)
