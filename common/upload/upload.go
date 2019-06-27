@@ -155,14 +155,16 @@ func officialActivityImgDeal(c *gin.Context) {
 	prePath := utils.NowFormatToYMD()
 	fileDst := fmt.Sprintf(".%s/%s/%s", officialActivityImgSrc, prePath, newFileName)
 
+	if utils.CreatePath(fmt.Sprintf(".%s/%s/", officialActivityImgSrc, prePath)) == false {
+		c.JSON(200, resp.UnknownErrOccurred)
+		return
+	}
+
 	// 保存上传过来的图片
 	err := c.SaveUploadedFile(fileHeader, fileDst)
 	if err != nil {
 		log.Println(err)
-		c.JSON(200, gin.H{
-			"code": 40001,
-			"msg":  "发生未知错误",
-		})
+		c.JSON(200, resp.UnknownErrOccurred)
 		return
 	}
 
@@ -170,10 +172,7 @@ func officialActivityImgDeal(c *gin.Context) {
 	srcImage, err := imaging.Open(fileDst)
 	if err != nil {
 		log.Fatalf("failed to open image: %v", err)
-		c.JSON(200, gin.H{
-			"code": 40001,
-			"msg":  "发生未知错误",
-		})
+		c.JSON(200, resp.UnknownErrOccurred)
 		return
 	}
 	newImage := imaging.Resize(srcImage, 640, 320, imaging.Lanczos)
@@ -211,56 +210,52 @@ func officialActivityImgDeal(c *gin.Context) {
 // 官方活动细节图片处理
 func officialActivityDetailImgDeal(c *gin.Context) {
 	form, _ := c.MultipartForm()
-	files := form.File
+	files := form.File["file"]
 
-	fmt.Println(files)
-	// return
+	imgList := []string{}
 
-	for _, file := range files {
-		for _, file2 := range file {
-			log.Println(file2.Filename)
-		}
+	prePath := utils.NowFormatToYMD()
+	if utils.CreatePath(fmt.Sprintf(".%s/%s/", officialActivityImgSrc, prePath)) == false {
+		c.JSON(200, resp.UnknownErrOccurred)
+		return
 	}
 
-	// 判断文件的合法性
-	// isPass, newFileName := imgFileVerify(fileHeader)
+	for _, file := range files {
+		// log.Println(file.Filename)
+		isPass, newFileName := imgFileVerify(file)
+		if isPass == false {
+			c.JSON(200, gin.H{
+				"code": 40005,
+				"msg":  "文件格式不正确",
+			})
+			return
+		}
+		if file.Size > imgSize2M {
+			c.JSON(200, gin.H{
+				"code": 40005,
+				"msg":  "大小不能超过2M",
+			})
+			return
+		}
 
-	// if isPass == false {
-	// 	c.JSON(200, gin.H{
-	// 		"code": 40001,
-	// 		"msg":  "文件格式不正确",
-	// 	})
-	// 	return
-	// }
+		fileDst := fmt.Sprintf(".%s/%s/%s", officialActivityImgSrc, prePath, newFileName)
 
-	// // 判断文件的大小
-	// if fileHeader.Size > imgSize2M {
-	// 	c.JSON(200, gin.H{
-	// 		"code": 40001,
-	// 		"msg":  "大小不能超过2M",
-	// 	})
-	// 	return
-	// }
+		// 保存上传过来的图片
+		err := c.SaveUploadedFile(file, fileDst)
+		if err != nil {
+			log.Println(err)
+			c.JSON(200, resp.UnknownErrOccurred)
+			return
+		}
 
-	// // TODO 删除本来的图片
-	// prePath := utils.NowFormatToYMD()
-	// fileDst := fmt.Sprintf(".%s/%s/%s", officialActivityImgSrc, prePath, newFileName)
+		imgList = append(imgList, fileDst[1:len(fileDst)])
+	}
 
-	// // 保存上传过来的图片
-	// err := c.SaveUploadedFile(fileHeader, fileDst)
-	// if err != nil {
-	// 	log.Println(err)
-	// 	c.JSON(200, gin.H{
-	// 		"code": 40001,
-	// 		"msg":  "发生未知错误",
-	// 	})
-	// 	return
-	// }
+	c.JSON(200, gin.H{
+		"errno": 0,
+		"data":  imgList,
+	})
 
-	// c.JSON(200, gin.H{
-	// 	"code": 20000,
-	// 	"msg":  miniFileDst[1:len(miniFileDst)],
-	// })
 }
 
 // 验证文件合法性和返回新的名称

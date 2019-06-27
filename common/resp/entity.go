@@ -36,4 +36,10 @@ var (
 		Code: 40004,
 		Msg:  "Token Is Expired!",
 	}
+
+	// UnknownErrOccurred 发生未知错误
+	UnknownErrOccurred = GeneralResp{
+		Code: 40005,
+		Msg:  "Unknown Err Occurred!",
+	}
 )

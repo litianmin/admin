@@ -5,6 +5,7 @@ import (
 	"crypto/sha1"
 	"encoding/hex"
 	"fmt"
+	"log"
 	"math/rand"
 	"os"
 	"time"
@@ -21,6 +22,16 @@ func PwdSha1Encrypt(pwd string) string {
 	resBytes := h.Sum(nil)
 	resStr := hex.EncodeToString(resBytes)
 	return resStr
+}
+
+// CreatePath 创建文件路径
+func CreatePath(filePath string) bool {
+	err := os.MkdirAll(filePath, os.ModePerm)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+	return true
 }
 
 // CreateFileAndPath 创建文件，包括文件夹, 模式都是可读的
