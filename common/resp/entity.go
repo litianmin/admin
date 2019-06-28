@@ -7,6 +7,12 @@ type GeneralResp struct {
 }
 
 var (
+	// OperateSuccess 一般的操作成功
+	OperateSuccess = GeneralResp{
+		Code: 20000,
+		Msg:  "Success!",
+	}
+
 	// AccountPwdErr 账号密码错误
 	AccountPwdErr = GeneralResp{
 		Code: 40000,

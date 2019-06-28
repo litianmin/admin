@@ -28,13 +28,11 @@ func NewOfficialActivity(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{
-		"code": 20000,
-		"msg":  data,
-	})
+	isSuccess := ucaseServer.NewOfficialActivity(&data)
+	if isSuccess == false {
+		c.JSON(200, resp.UnknownErrOccurred)
+		return
+	}
 
-	// c.JSON(200, gin.H{
-	// 	"code": 20000,
-	// 	"msg":  "something new",
-	// })
+	c.JSON(200, resp.OperateSuccess)
 }

@@ -19,3 +19,17 @@ type NewActivity struct {
 	RecruitNumb uint8   `json:"recruitNumb"`
 	Cont        string  `json:"cont"`
 }
+
+// ActivityBaseInfo 队伍基本信息
+type ActivityBaseInfo struct {
+	ActivityID    uint64  `json:"activityID" bson:"activityID"`
+	Title         string  `json:"title" bson:"title"`
+	Type          uint8   `json:"type" bson:"type"`
+	BeginTime     int64   `json:"beginTIme" bson:"beginTime"`
+	EndTime       int64   `json:"endTime" bson:"endTime"`
+	Venue         AddrObj `json:"venue" bson:"venue"`
+	DisplayImg    string  `json:"displayImg" bson:"displayImg"`
+	RecruitNumb   uint8   `json:"recruitNumb" bson:"recruitNumb"`
+	Distance      float64 `json:"distance" bson:"distance"`
+	RecruitStatus uint8   `json:"recruitStatus" bson:"recruitStatus"`
+}
