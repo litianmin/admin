@@ -20,6 +20,8 @@ const (
 	gameDisplayImgSrc = "./image/game/display/"
 
 	officialActivityImgSrc = "/image/official/acticity/"
+
+	articleImgSrc = "/image/article/"
 )
 
 // ImgUpload 图片上传处理
@@ -41,6 +43,10 @@ func ImgUpload(c *gin.Context) {
 		officialActivityImgDeal(c)
 	case "officialActivityDetail":
 		officialActivityDetailImgDeal(c)
+	case "article": // 文章话题
+		articleImgDeal(c)
+	case "articleDetail":
+		articleDetailImgDeal(c)
 	}
 
 }
@@ -256,6 +262,123 @@ func officialActivityDetailImgDeal(c *gin.Context) {
 		"data":  imgList,
 	})
 
+}
+
+// 美文话题展示图片处理
+func articleImgDeal(c *gin.Context) {
+	fileHeader, _ := c.FormFile("file")
+
+	// 判断文件的合法性
+	isPass, newFileName := imgFileVerify(fileHeader)
+
+	if isPass == false {
+		c.JSON(200, gin.H{
+			"code": 40001,
+			"msg":  "文件格式不正确",
+		})
+		return
+	}
+
+	// 判断文件的大小
+	if fileHeader.Size > imgSize5M {
+		c.JSON(200, gin.H{
+			"code": 40001,
+			"msg":  "大小不能超过5M",
+		})
+		return
+	}
+
+	// TODO 删除本来的图片
+	prePath := utils.NowFormatToYMD()
+	fileDst := fmt.Sprintf(".%s/%s/%s", articleImgSrc, prePath, newFileName)
+
+	if utils.CreatePath(fmt.Sprintf(".%s/%s/", articleImgSrc, prePath)) == false {
+		c.JSON(200, resp.UnknownErrOccurred)
+		return
+	}
+
+	// 保存上传过来的图片
+	err := c.SaveUploadedFile(fileHeader, fileDst)
+	if err != nil {
+		log.Println(err)
+		c.JSON(200, resp.UnknownErrOccurred)
+		return
+	}
+
+	// 重新设置图片的大小
+	srcImage, err := imaging.Open(fileDst)
+	if err != nil {
+		log.Fatalf("failed to open image: %v", err)
+		c.JSON(200, resp.UnknownErrOccurred)
+		return
+	}
+	newImage := imaging.Resize(srcImage, 640, 320, imaging.Lanczos)
+
+	// 生成新的文件名称
+	strArr := strings.Split(newFileName, ".")
+	suffix := strArr[1]
+	miniFileName := utils.CreateImgFileName()
+	miniFileDst := fmt.Sprintf(".%s/%s/%s.%s", articleImgSrc, prePath, miniFileName, suffix)
+
+	err = imaging.Save(newImage, miniFileDst)
+	if err != nil {
+		log.Println(err)
+	}
+
+	c.JSON(200, gin.H{
+		"code": 20000,
+		"msg":  miniFileDst[1:len(miniFileDst)],
+	})
+}
+
+// 美文话题详情图片处理
+func articleDetailImgDeal(c *gin.Context) {
+	form, _ := c.MultipartForm()
+	files := form.File["file"]
+
+	imgList := []string{}
+
+	prePath := utils.NowFormatToYMD()
+	if utils.CreatePath(fmt.Sprintf(".%s/%s/", articleImgSrc, prePath)) == false {
+		c.JSON(200, resp.UnknownErrOccurred)
+		return
+	}
+
+	for _, file := range files {
+		// log.Println(file.Filename)
+		isPass, newFileName := imgFileVerify(file)
+		if isPass == false {
+			c.JSON(200, gin.H{
+				"code": 40005,
+				"msg":  "文件格式不正确",
+			})
+			return
+		}
+		if file.Size > imgSize2M {
+			c.JSON(200, gin.H{
+				"code": 40005,
+				"msg":  "大小不能超过2M",
+			})
+			return
+		}
+
+		fileDst := fmt.Sprintf(".%s/%s/%s", articleImgSrc, prePath, newFileName)
+
+		// 保存上传过来的图片
+		err := c.SaveUploadedFile(file, fileDst)
+		if err != nil {
+			log.Println(err)
+			c.JSON(200, resp.UnknownErrOccurred)
+			return
+		}
+
+		imgList = append(imgList, fileDst[1:len(fileDst)])
+	}
+
+	c.JSON(200, gin.H{
+		"errno": 0,
+		"data":  imgList,
+	})
 }
 
 // 验证文件合法性和返回新的名称
