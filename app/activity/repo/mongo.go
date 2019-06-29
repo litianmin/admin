@@ -39,7 +39,7 @@ func (mg *MongoRepo) NewOfficialActivity(info *entity.ActivityBaseInfo) bool {
 		"activityID":     info.ActivityID,
 		"title":          info.Title,
 		"type":           info.Type,
-		"beginTIme":      info.BeginTime,
+		"beginTime":      info.BeginTime,
 		"endTime":        info.EndTime,
 		"venue":          info.Venue,
 		"displayImg":     info.DisplayImg,
