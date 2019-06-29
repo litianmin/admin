@@ -36,7 +36,7 @@ func (mg *MongoRepo) NewArticle(article *entity.ArticleBaseInfo) bool {
 		"articleID":      article.ArticleID,
 		"title":          article.Title,
 		"type":           article.Type,
-		"beginTIme":      article.BeginTime,
+		"beginTime":      article.BeginTime,
 		"endTime":        article.EndTime,
 		"displayImg":     article.DisplayImg,
 		"expiredTimeObj": expiredTimeObj,
