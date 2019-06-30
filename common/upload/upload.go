@@ -159,9 +159,9 @@ func officialActivityImgDeal(c *gin.Context) {
 
 	// TODO 删除本来的图片
 	prePath := utils.NowFormatToYMD()
-	fileDst := fmt.Sprintf(".%s/%s/%s", officialActivityImgSrc, prePath, newFileName)
+	fileDst := fmt.Sprintf(".%s%s/%s", officialActivityImgSrc, prePath, newFileName)
 
-	if utils.CreatePath(fmt.Sprintf(".%s/%s/", officialActivityImgSrc, prePath)) == false {
+	if utils.CreatePath(fmt.Sprintf(".%s%s/", officialActivityImgSrc, prePath)) == false {
 		c.JSON(200, resp.UnknownErrOccurred)
 		return
 	}
@@ -187,7 +187,7 @@ func officialActivityImgDeal(c *gin.Context) {
 	strArr := strings.Split(newFileName, ".")
 	suffix := strArr[1]
 	miniFileName := utils.CreateImgFileName()
-	miniFileDst := fmt.Sprintf(".%s/%s/%s.%s", officialActivityImgSrc, prePath, miniFileName, suffix)
+	miniFileDst := fmt.Sprintf(".%s%s/%s.%s", officialActivityImgSrc, prePath, miniFileName, suffix)
 
 	err = imaging.Save(newImage, miniFileDst)
 	if err != nil {
@@ -221,7 +221,7 @@ func officialActivityDetailImgDeal(c *gin.Context) {
 	imgList := []string{}
 
 	prePath := utils.NowFormatToYMD()
-	if utils.CreatePath(fmt.Sprintf(".%s/%s/", officialActivityImgSrc, prePath)) == false {
+	if utils.CreatePath(fmt.Sprintf(".%s%s/", officialActivityImgSrc, prePath)) == false {
 		c.JSON(200, resp.UnknownErrOccurred)
 		return
 	}
@@ -244,7 +244,7 @@ func officialActivityDetailImgDeal(c *gin.Context) {
 			return
 		}
 
-		fileDst := fmt.Sprintf(".%s/%s/%s", officialActivityImgSrc, prePath, newFileName)
+		fileDst := fmt.Sprintf(".%s%s/%s", officialActivityImgSrc, prePath, newFileName)
 
 		// 保存上传过来的图片
 		err := c.SaveUploadedFile(file, fileDst)
@@ -290,9 +290,9 @@ func articleImgDeal(c *gin.Context) {
 
 	// TODO 删除本来的图片
 	prePath := utils.NowFormatToYMD()
-	fileDst := fmt.Sprintf(".%s/%s/%s", articleImgSrc, prePath, newFileName)
+	fileDst := fmt.Sprintf(".%s%s/%s", articleImgSrc, prePath, newFileName)
 
-	if utils.CreatePath(fmt.Sprintf(".%s/%s/", articleImgSrc, prePath)) == false {
+	if utils.CreatePath(fmt.Sprintf(".%s%s/", articleImgSrc, prePath)) == false {
 		c.JSON(200, resp.UnknownErrOccurred)
 		return
 	}
@@ -318,7 +318,7 @@ func articleImgDeal(c *gin.Context) {
 	strArr := strings.Split(newFileName, ".")
 	suffix := strArr[1]
 	miniFileName := utils.CreateImgFileName()
-	miniFileDst := fmt.Sprintf(".%s/%s/%s.%s", articleImgSrc, prePath, miniFileName, suffix)
+	miniFileDst := fmt.Sprintf(".%s%s/%s.%s", articleImgSrc, prePath, miniFileName, suffix)
 
 	err = imaging.Save(newImage, miniFileDst)
 	if err != nil {
@@ -339,7 +339,7 @@ func articleDetailImgDeal(c *gin.Context) {
 	imgList := []string{}
 
 	prePath := utils.NowFormatToYMD()
-	if utils.CreatePath(fmt.Sprintf(".%s/%s/", articleImgSrc, prePath)) == false {
+	if utils.CreatePath(fmt.Sprintf(".%s%s/", articleImgSrc, prePath)) == false {
 		c.JSON(200, resp.UnknownErrOccurred)
 		return
 	}
@@ -362,7 +362,7 @@ func articleDetailImgDeal(c *gin.Context) {
 			return
 		}
 
-		fileDst := fmt.Sprintf(".%s/%s/%s", articleImgSrc, prePath, newFileName)
+		fileDst := fmt.Sprintf(".%s%s/%s", articleImgSrc, prePath, newFileName)
 
 		// 保存上传过来的图片
 		err := c.SaveUploadedFile(file, fileDst)
