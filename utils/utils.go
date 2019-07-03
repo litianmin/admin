@@ -13,6 +13,8 @@ import (
 
 const (
 	encryptPrivKey = "gnimoci"
+	// ErrorLogPath 错误记录文件
+	ErrorLogPath = "/usr/local/nginx/error"
 )
 
 // PwdSha1Encrypt 加密密码, 并且返回字符串
@@ -82,4 +84,42 @@ func NowAfterFormatToDate(duration int64) string {
 // NowFormatToYMD 返回现在时间的年月日(例如：20190101)
 func NowFormatToYMD() string {
 	return time.Now().Format("20060102")
+}
+
+// ErrLog 记录错误相关信息
+// @logType 1=>notic, 2=>warning, 3=>fatal
+func ErrLog(logType int, msg interface{}) {
+	//创建文件夹
+	newErrorLogPath := fmt.Sprintf("%s/%s", ErrorLogPath, NowFormatToYMD())
+	os.MkdirAll(newErrorLogPath, os.ModePerm)
+	fileName := fmt.Sprintf("%s/%s", newErrorLogPath, "error.log")
+	//打开日志文件，不存在则创建
+	file, _ := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	defer file.Close()
+
+	//设置输出流
+	log.SetOutput(file)
+
+	preFix := ""
+	switch logType {
+	case 1: // notic
+		preFix = "[Notic]"
+	case 2: // warning
+		preFix = "[Warning]"
+	case 3:
+		preFix = "[Fatal]"
+	}
+
+	//日志前缀
+	log.SetPrefix(preFix)
+
+	//日志输出样式
+	log.SetFlags(log.Llongfile | log.Ldate | log.Ltime)
+
+	str := fmt.Sprintf("%v", msg)
+
+	log.Output(2, str)
+
+	// 记录信息
+	// log.Println(msg)
 }

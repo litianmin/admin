@@ -2,9 +2,8 @@ package repo
 
 import (
 	"admin/app/activity/entity"
+	"admin/utils"
 	"context"
-	"ic/utils"
-	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -21,14 +20,9 @@ func NewMongo(conn *mongo.Database) *MongoRepo {
 	return &MongoRepo{conn}
 }
 
-// NewOfficialActivity 创建官方活动
-func (mg *MongoRepo) NewOfficialActivity(info *entity.ActivityBaseInfo) bool {
-	// 活动结束后就直接删除吧
-	expiredTime := info.EndTime
-
-	// 设置删除的时间，默认设置为该活动结束的五天后
-	deleteTime := expiredTime + 3600*24*2
-	expiredTimeObj := utils.UnixFormatToTimeObj(deleteTime)
+// NewActivity 创建官方活动
+// @recruitStatus 0 => 招募中， 1 => 停止招募， 招募成功/招募过期， 2 => 已删除(违规等)
+func (mg *MongoRepo) NewActivity(info *entity.NewActivity) bool {
 
 	stmt := mg.Conn.Collection("activity")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -36,17 +30,16 @@ func (mg *MongoRepo) NewOfficialActivity(info *entity.ActivityBaseInfo) bool {
 
 	// 插入的数据
 	insertData := bson.M{
-		"activityID":     info.ActivityID,
 		"title":          info.Title,
 		"type":           info.Type,
-		"beginTime":      info.BeginTime,
-		"endTime":        info.EndTime,
+		"beginTime":      info.BeginTime, // 活动开始时间
+		"endTime":        info.EndTime,   // 活动结束时间， 活动结束后不能加入组队，通知活动列表也不再展示
 		"venue":          info.Venue,
 		"displayImg":     info.DisplayImg,
 		"recruitNumb":    info.RecruitNumb,
 		"hadRecruitNumb": 0,
-		"expiredTimeObj": expiredTimeObj,
-		"recruitStatus":  info.RecruitStatus,
+		"recruitStatus":  0,
+		"cont":           info.Cont,
 		"locate": bson.M{
 			"type":        "Point",
 			"coordinates": bson.A{info.Venue.Lng, info.Venue.Lat},
@@ -55,7 +48,7 @@ func (mg *MongoRepo) NewOfficialActivity(info *entity.ActivityBaseInfo) bool {
 
 	_, err := stmt.InsertOne(ctx, insertData)
 	if err != nil {
-		log.Println(err)
+		utils.ErrLog(3, err)
 		return false
 	}
 	return true

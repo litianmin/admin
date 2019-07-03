@@ -23,8 +23,9 @@ func main() {
 	r.POST("/gamecreate", middleware.TokenIsValid, gameServer.CreateGame)
 
 	// 创建活动
-	r.POST("/officialActivity/create", middleware.TokenIsValid, activityServer.NewOfficialActivity)
+	r.POST("/activity/create", middleware.TokenIsValid, activityServer.NewActivity)
 
+	// 创建文章
 	r.POST("/article/create", middleware.TokenIsValid, articleServer.NewArticle)
 
 	r.Run(":9999")

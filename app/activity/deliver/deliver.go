@@ -16,8 +16,8 @@ var mysqlServer = repo.NewMysqlRepo(mysql.DBConn)
 var mongoServer = repo.NewMongo(mongo.MongoDB)
 var ucaseServer = ucase.NewUcase(mysqlServer, mongoServer)
 
-// NewOfficialActivity 创建一个新的官方活动
-func NewOfficialActivity(c *gin.Context) {
+// NewActivity 创建一个新的官方活动
+func NewActivity(c *gin.Context) {
 
 	data := entity.NewActivity{}
 
@@ -28,7 +28,7 @@ func NewOfficialActivity(c *gin.Context) {
 		return
 	}
 
-	isSuccess := ucaseServer.NewOfficialActivity(&data)
+	isSuccess := ucaseServer.NewActivity(&data)
 	if isSuccess == false {
 		c.JSON(200, resp.UnknownErrOccurred)
 		return
