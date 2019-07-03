@@ -20,9 +20,8 @@ func NewMysqlRepo(conn *sql.DB) *MysqlRepo {
 // NewNewOfficialActivity 创建新的官方活动
 func (r *MysqlRepo) NewNewOfficialActivity(data *entity.NewActivity) (IsSuccess bool, Activity *entity.ActivityBaseInfo) {
 	now := utils.NowFormatUnix()
-	meetingAddr := data.Venue.Name + "," + data.Venue.Addr
 
-	res, err := r.Conn.Exec("INSERT INTO official_activity(sponsor, title, act_type, display_img, meeting_addr, meeting_lng, meeting_lat, begin_time, end_time, recruit_numb, is_official, apply_status, is_delete, create_time) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 1, data.Title, data.Type, data.DisplayImg, meetingAddr, data.Venue.Lng, data.Venue.Lat, data.BeginTime, data.EndTime, data.RecruitNumb, 1, 2, 0, now)
+	res, err := r.Conn.Exec("INSERT INTO official_activity(sponsor, title, act_type, display_img, meeting_addr_name, meeting_addr_detail, meeting_lng, meeting_lat, begin_time, end_time, recruit_numb, is_official, apply_status, is_delete, create_time) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 1, data.Title, data.Type, data.DisplayImg, data.Venue.Name, data.Venue.Addr, data.Venue.Lng, data.Venue.Lat, data.BeginTime, data.EndTime, data.RecruitNumb, 1, 2, 0, now)
 
 	if err != nil {
 		log.Println(err)

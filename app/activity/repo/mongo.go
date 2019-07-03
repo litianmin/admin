@@ -44,6 +44,7 @@ func (mg *MongoRepo) NewOfficialActivity(info *entity.ActivityBaseInfo) bool {
 		"venue":          info.Venue,
 		"displayImg":     info.DisplayImg,
 		"recruitNumb":    info.RecruitNumb,
+		"hadRecruitNumb": 0,
 		"expiredTimeObj": expiredTimeObj,
 		"recruitStatus":  info.RecruitStatus,
 		"locate": bson.M{
