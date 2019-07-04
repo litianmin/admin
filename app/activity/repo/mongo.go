@@ -4,6 +4,7 @@ import (
 	"admin/app/activity/entity"
 	"admin/utils"
 	"context"
+	"encoding/json"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -22,7 +23,7 @@ func NewMongo(conn *mongo.Database) *MongoRepo {
 
 // NewActivity 创建官方活动
 // @recruitStatus 0 => 招募中， 1 => 停止招募， 招募成功/招募过期， 2 => 已删除(违规等)
-func (mg *MongoRepo) NewActivity(info *entity.NewActivity) bool {
+func (mg *MongoRepo) NewActivity(info *entity.NewActivity) (IsSuccess bool, ActivityID string) {
 
 	stmt := mg.Conn.Collection("activity")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -46,10 +47,21 @@ func (mg *MongoRepo) NewActivity(info *entity.NewActivity) bool {
 		},
 	}
 
-	_, err := stmt.InsertOne(ctx, insertData)
+	res, err := stmt.InsertOne(ctx, insertData)
 	if err != nil {
 		utils.ErrLog(3, err)
-		return false
+		return false, ""
 	}
-	return true
+
+	newActivityIDByte, _ := json.Marshal(res.InsertedID) // 这个后面看看有没有其他的好办法弄出来，真他妈的恶心
+	newActivityIDStr := string(newActivityIDByte)
+	newActivityID := newActivityIDStr[1:(len(newActivityIDStr) - 1)]
+	// fmt.Println(str)
+	// fmt.Println(string(res.InsertedID))
+
+	// myStr := "5d1da36bd95e763b0c3f792f"
+	// newObj, _ := primitive.ObjectIDFromHex(myStr)
+	// fmt.Println(newObj)
+
+	return true, newActivityID
 }

@@ -7,6 +7,7 @@ import (
 	"admin/common/resp"
 	"admin/init/mongo"
 	"admin/init/mysql"
+	"ic/init/redis"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +15,8 @@ import (
 
 var mysqlServer = repo.NewMysqlRepo(mysql.DBConn)
 var mongoServer = repo.NewMongo(mongo.MongoDB)
-var ucaseServer = ucase.NewUcase(mysqlServer, mongoServer)
+var redisServer = repo.NewRedis(redis.RedisPool)
+var ucaseServer = ucase.NewUcase(mysqlServer, mongoServer, redisServer)
 
 // NewActivity 创建一个新的官方活动
 func NewActivity(c *gin.Context) {
