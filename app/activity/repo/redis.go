@@ -21,18 +21,17 @@ func NewRedis(conn *redis.Pool) *RedisRepo {
 // NewActivity 创建新的活动
 func (rd *RedisRepo) NewActivity(activityID string, data *entity.NewActivity) bool {
 	c := rd.Conn.Get()
-	teamKey := fmt.Sprintf("activity:teammate:%s", activityID)
+	teamKey := fmt.Sprintf("activity:recruitnumb:%s", activityID)
 
 	// 创建一个空的有序集合
-	_, err := c.Do("ZADD", teamKey, 0, 0)
+	_, err := c.Do("SET", teamKey, data.RecruitNumb)
 
 	if err != nil {
 		utils.ErrLog(3, err)
 		return false
 	}
 	// 设置过期时间，为活动结束后两天
-	deleteTime := data.EndTime + 3600*24*2
-	_, err = c.Do("EXPIREAT", teamKey, deleteTime)
+	_, err = c.Do("EXPIREAT", teamKey, data.EndTime)
 	if err != nil {
 		utils.ErrLog(3, err)
 		return false
