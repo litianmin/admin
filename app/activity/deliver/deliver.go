@@ -5,18 +5,16 @@ import (
 	"admin/app/activity/repo"
 	"admin/app/activity/ucase"
 	"admin/common/resp"
-	"admin/init/mongo"
-	"admin/init/mysql"
-	"ic/init/redis"
+	"admin/init/pgsql"
+	"admin/init/redis"
 	"log"
 
 	"github.com/gin-gonic/gin"
 )
 
-var mysqlServer = repo.NewMysqlRepo(mysql.DBConn)
-var mongoServer = repo.NewMongo(mongo.MongoDB)
+var pgServer = repo.NewPgRepo(pgsql.DBConn)
 var redisServer = repo.NewRedis(redis.RedisPool)
-var ucaseServer = ucase.NewUcase(mysqlServer, mongoServer, redisServer)
+var ucaseServer = ucase.NewUcase(pgServer, redisServer)
 
 // NewActivity 创建一个新的官方活动
 func NewActivity(c *gin.Context) {

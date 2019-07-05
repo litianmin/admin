@@ -2,15 +2,12 @@ package ucase
 
 import (
 	"admin/app/activity/entity"
+	"fmt"
 )
 
-// MysqlServer 定义repo 那边需要实现的接口
-type MysqlServer interface {
-}
-
-// MongoServer 定义mongoRepo
-type MongoServer interface {
-	NewActivity(data *entity.NewActivity) (IsSuccess bool, ActivityID string)
+// PgServer 初始化pgsql
+type PgServer interface {
+	NewActivity(data *entity.NewActivity) (IsSuccess bool, NewActivityID int64)
 }
 
 // RedisServer redis 服务集
@@ -20,29 +17,30 @@ type RedisServer interface {
 
 // Ucase 定义结构体
 type Ucase struct {
-	MysqlRepo MysqlServer
-	MongoRepo MongoServer
+	PgRepo    PgServer
 	RedisRepo RedisServer
 }
 
 // NewUcase 初始化 Ucase
-func NewUcase(mysqlRepo MysqlServer, mongoRepo MongoServer, redisRepo RedisServer) *Ucase {
-	return &Ucase{mysqlRepo, mongoRepo, redisRepo}
+func NewUcase(pgRepo PgServer, redisRepo RedisServer) *Ucase {
+	return &Ucase{pgRepo, redisRepo}
 }
 
 // NewActivity 创建新的活动
 func (u *Ucase) NewActivity(data *entity.NewActivity) bool {
 
-	stepOne, newActivityID := u.MongoRepo.NewActivity(data)
+	stepOne, newActivityID := u.PgRepo.NewActivity(data)
 	if stepOne == false {
 		return false
 	}
 
-	stepTwo := u.RedisRepo.NewActivity(newActivityID, data)
+	fmt.Println(newActivityID)
 
-	if stepTwo == false {
-		return false
-	}
+	// stepTwo := u.RedisRepo.NewActivity(newActivityID, data)
 
-	return true
+	// if stepTwo == false {
+	// return false
+	// }
+
+	return stepOne
 }
