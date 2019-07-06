@@ -2,7 +2,6 @@ package ucase
 
 import (
 	"admin/app/activity/entity"
-	"fmt"
 )
 
 // PgServer 初始化pgsql
@@ -12,7 +11,7 @@ type PgServer interface {
 
 // RedisServer redis 服务集
 type RedisServer interface {
-	NewActivity(activityID string, data *entity.NewActivity) bool
+	NewActivity(activityID int64, data *entity.NewActivity) bool
 }
 
 // Ucase 定义结构体
@@ -34,13 +33,11 @@ func (u *Ucase) NewActivity(data *entity.NewActivity) bool {
 		return false
 	}
 
-	fmt.Println(newActivityID)
+	stepTwo := u.RedisRepo.NewActivity(newActivityID, data)
 
-	// stepTwo := u.RedisRepo.NewActivity(newActivityID, data)
-
-	// if stepTwo == false {
-	// return false
-	// }
+	if stepTwo == false {
+		return false
+	}
 
 	return stepOne
 }

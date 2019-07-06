@@ -19,9 +19,9 @@ func NewRedis(conn *redis.Pool) *RedisRepo {
 }
 
 // NewActivity 创建新的活动
-func (rd *RedisRepo) NewActivity(activityID string, data *entity.NewActivity) bool {
+func (rd *RedisRepo) NewActivity(activityID int64, data *entity.NewActivity) bool {
 	c := rd.Conn.Get()
-	teamKey := fmt.Sprintf("activity:recruitnumb:%s", activityID)
+	teamKey := fmt.Sprintf("activity:recruitnumb:%d", activityID)
 
 	// 创建一个空的有序集合
 	_, err := c.Do("SET", teamKey, data.RecruitNumb)

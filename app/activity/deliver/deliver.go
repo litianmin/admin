@@ -7,7 +7,6 @@ import (
 	"admin/common/resp"
 	"admin/init/pgsql"
 	"admin/init/redis"
-	"log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,7 +22,6 @@ func NewActivity(c *gin.Context) {
 
 	err := c.Bind(&data)
 	if err != nil {
-		log.Println(err)
 		c.JSON(200, resp.ParamsErr)
 		return
 	}
