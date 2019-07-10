@@ -5,16 +5,13 @@ import (
 	"admin/app/article/repo"
 	"admin/app/article/ucase"
 	"admin/common/resp"
+	"admin/init/pgsql"
 
 	"github.com/gin-gonic/gin"
-
-	"admin/init/mongo"
-	"admin/init/mysql"
 )
 
-var mysqlServer = repo.NewMysqlRepo(mysql.DBConn)
-var mongoServer = repo.NewMongo(mongo.MongoDB)
-var ucaseServer = ucase.NewUcase(mysqlServer, mongoServer)
+var pgServer = repo.NewPgRepo(pgsql.DBConn)
+var ucaseServer = ucase.NewUcase(pgServer)
 
 // NewArticle 新增文章
 func NewArticle(c *gin.Context) {
