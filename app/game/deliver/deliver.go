@@ -6,13 +6,13 @@ import (
 	"admin/app/game/ucase"
 	"admin/app/game/validate"
 	"admin/common/resp"
-	"admin/init/mysql"
+	"admin/init/pgsql"
 
 	"github.com/gin-gonic/gin"
 )
 
-var repoServer = repo.NewRepo(mysql.DBConn)
-var ucaseServer = ucase.NewUcase(repoServer)
+var pgServer = repo.NewPgRepo(pgsql.DBConn)
+var ucaseServer = ucase.NewUcase(pgServer)
 
 // CreateGame 创建新的游戏
 func CreateGame(c *gin.Context) {
