@@ -6,13 +6,13 @@ import (
 	"admin/app/user/ucase"
 	"admin/app/user/validate"
 	"admin/common/resp"
-	"admin/init/mysql"
+	"admin/init/pgsql"
 
 	"github.com/gin-gonic/gin"
 )
 
-var repoServer = repo.NewRepo(mysql.DBConn)
-var ucaseServer = ucase.NewUcase(repoServer)
+var pgServer = repo.NewPgRepo(pgsql.DBConn)
+var ucaseServer = ucase.NewUcase(pgServer)
 
 // Login serve for login!
 // 验证成功， 返回token，反则返回空
