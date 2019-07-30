@@ -34,7 +34,7 @@ func (pg *PgRepo) NewActivity(data *entity.NewActivity) (IsSuccess bool, NewActi
 	now := utils.NowFormatUnix()
 
 	// 插入活动基本数据(因为geo数据类型问题，需要这样赋值)
-	sql := fmt.Sprintf("INSERT INTO activity (sponsor, title, act_type, display_img, site_lng, site_lat, site_geog, site_name, site_detail, begin_time, end_time, recruit_numb, is_official, apply_status, create_time) VALUES ($1, $2, $3, $4, $5, $6, 'SRID=4326;POINT(%f %f)', $7, $8, $9, $10, $11, $12, $13, $14) RETURNING id", data.Venue.Lng, data.Venue.Lat)
+	sql := fmt.Sprintf("INSERT INTO activity_team (sponsor, title, act_type, display_img, site_lng, site_lat, site_geog, site_name, site_detail, begin_time, end_time, recruit_numb, is_official, apply_status, create_time) VALUES ($1, $2, $3, $4, $5, $6, 'SRID=4326;POINT(%f %f)', $7, $8, $9, $10, $11, $12, $13, $14) RETURNING id", data.Venue.Lng, data.Venue.Lat)
 
 	var newID int64
 
