@@ -54,6 +54,14 @@ func (pg *PgRepo) NewActivity(data *entity.NewActivity) (IsSuccess bool, NewActi
 		return false, 0
 	}
 
+	descFlag := fmt.Sprintf("%d-%d", 5, newID)
+	_, err = tx.Exec("INSERT INTO join_team_desc (flag, title, img) VALUES ($1, $2, $3)", descFlag, data.Title, data.DisplayImg)
+	if err != nil {
+		tx.Rollback()
+		utils.ErrLog(3, err)
+		return false, 0
+	}
+
 	tx.Commit()
 
 	return true, newID
