@@ -14,7 +14,7 @@ import (
 const (
 	encryptPrivKey = "gnimoci"
 	// ErrorLogPath 错误记录文件
-	ErrorLogPath = "/usr/local/nginx/error"
+	ErrorLogPath = "/usr/share/nginx/html/error"
 )
 
 // PwdSha1Encrypt 加密密码, 并且返回字符串
