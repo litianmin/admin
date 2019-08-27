@@ -80,7 +80,7 @@ func gameLogoDeal(c *gin.Context) {
 	if err != nil {
 		log.Fatalf("failed to open image: %v", err)
 	}
-	newSrcImage := imaging.Resize(srcImage, 120, 120, imaging.Lanczos)
+	newSrcImage := imaging.Resize(srcImage, 240, 240, imaging.Lanczos)
 
 	imaging.Save(newSrcImage, gameLogoSrc+newFileName+"_mini.png")
 
@@ -312,7 +312,7 @@ func articleImgDeal(c *gin.Context) {
 		c.JSON(200, resp.UnknownErrOccurred)
 		return
 	}
-	newImage := imaging.Resize(srcImage, 640, 320, imaging.Lanczos)
+	newImage := imaging.Resize(srcImage, 640, 360, imaging.Lanczos)
 
 	// 生成新的文件名称
 	strArr := strings.Split(newFileName, ".")
