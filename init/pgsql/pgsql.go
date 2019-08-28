@@ -11,8 +11,8 @@ import (
 
 const (
 	dbHost = "localhost"
-	// dbUsr      = "postgres"
-	dbUsr      = "litianmin"
+	dbUsr  = "postgres"
+	// dbUsr      = "litianmin"
 	dbPwd      = "Hbk5551412"
 	dbDatabase = "postgres"
 )
